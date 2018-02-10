@@ -1,0 +1,21 @@
+{
+    "name": "potogan/populator",
+    "description": "array-to-object converter/hydrater",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Popy",
+            "email": "popy.dev@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "suggests": {
+        "doctrine/annotations": "^1.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Potogan\\Populator\\": "src/"
+        }
+    }
+}
