@@ -1,13 +1,10 @@
 <?php
 
-namespace 
-Potogan\Populator\Hydrator;
+namespace Potogan\Populator\Hydrator;
 
 use Traversable;
-use 
-Potogan\Populator\Configuration;
-use 
-Potogan\Populator\HydratorInterface;
+use Potogan\Populator\Configuration;
+use Potogan\Populator\HydratorInterface;
 
 /**
  * @Annotation
@@ -20,8 +17,7 @@ class Collection implements HydratorInterface
      *
      * @Required
      *
-     * @var 
-Potogan\Populator\HydratorInterface
+     * @var Potogan\Populator\HydratorInterface
      */
     public $internal;
 
@@ -45,6 +41,30 @@ Potogan\Populator\HydratorInterface
 
         foreach ($data as $key => $value) {
             $value = $this->internal->hydrate($value, $configuration);
+
+            if ($this->preserveKeys) {
+                $res[$key] = $value;
+            } else {
+                $res[] = $value;
+            }
+        }
+
+        return $res;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function normalize($data, Configuration $configuration)
+    {
+        if (!is_array($data) && !$data instanceof Traversable) {
+            return [];
+        }
+
+        $res = [];
+
+        foreach ($data as $key => $value) {
+            $value = $this->internal->normalize($value, $configuration);
 
             if ($this->preserveKeys) {
                 $res[$key] = $value;

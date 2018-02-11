@@ -1,11 +1,12 @@
 <?php
 
-namespace Potogan\Populator\Hydrator;
+namespace Potogan\HotoilBundle\Hydratation\Hydrator;
 
 use DateTimeZone;
+use DateTimeInterface;
 use DateTimeImmutable;
-use Potogan\Populator\Configuration;
-use Potogan\Populator\HydratorInterface;
+use Potogan\HotoilBundle\Hydratation\Configuration;
+use Potogan\HotoilBundle\Hydratation\HydratorInterface;
 
 /**
  * @Annotation
@@ -30,6 +31,42 @@ class DateTime implements HydratorInterface
      */
     public function hydrate($data, Configuration $configuration)
     {
+        $c = $this->buildConfiguration($configuration);
+
+        $date = DateTimeImmutable::createFromFormat($c->get('format'), $data, $c->get('timezone'));
+
+        if ($c->get('timezone') !== $c->get('internal_timezone')) {
+            $date = $date->setTimezone($c->get('internal_timezone'));
+        }
+
+        return $date;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function normalize($data, Configuration $configuration)
+    {
+        if (!$data instanceof DateTimeInterface) {
+            return;
+        }
+
+        if (!$data instanceof DateTimeImmutable) {
+            $data = clone $data;
+        }
+
+        $c = $this->buildConfiguration($configuration);
+
+
+        if ($c->get('timezone') !== $c->get('internal_timezone')) {
+            $date = $date->setTimezone($c->get('timezone'));
+        }
+
+        return $date->format($c->get('format'));
+    }
+
+    protected function buildConfiguration($configuration)
+    {
         $format = $this->format ?: $configuration->get('datetime_default_format', 'Y-m-d H:i:s');
         $internalTimezone = $configuration->get(
             'datetime_application_timezone',
@@ -38,12 +75,10 @@ class DateTime implements HydratorInterface
 
         $timezone = $configuration->get('datetime_data_timezone', $internalTimezone);
 
-        $date = DateTimeImmutable::createFromFormat($format, $data, $timezone);
-
-        if ($timezone !== $internalTimezone) {
-            $date = $date->setTimezone($internalTimezone);
-        }
-
-        return $date;
+        return new Configuration([
+            'format' =>$this->format ?: $configuration->get('datetime_default_format', 'Y-m-d H:i:s'),
+            'internal_timezone' => $internalTimezone,
+            'timezone' => $timezone,
+        ]);
     }
 }

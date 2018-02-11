@@ -54,4 +54,12 @@ class Object implements HydratorInterface
 
         return $res;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function normalize($data, Configuration $configuration)
+    {
+        throw new \RuntimeException('NIY');
+    }
 }

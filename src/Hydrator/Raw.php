@@ -1,9 +1,9 @@
 <?php
 
-namespace Potogan\Populator\Hydrator;
+namespace Potogan\HotoilBundle\Hydratation\Hydrator;
 
-use Potogan\Populator\Configuration;
-use Potogan\Populator\HydratorInterface;
+use Potogan\HotoilBundle\Hydratation\Configuration;
+use Potogan\HotoilBundle\Hydratation\HydratorInterface;
 
 /**
  * Transparent Hydrator, used to transmit a value without any modification.
@@ -17,6 +17,14 @@ class Raw implements HydratorInterface
      * @inheritDoc
      */
     public function hydrate($data, Configuration $configuration)
+    {
+        return $data;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function normalize($data, Configuration $configuration)
     {
         return $data;
     }

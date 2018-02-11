@@ -1,9 +1,9 @@
 <?php
 
-namespace Potogan\Populator\Hydrator;
+namespace Potogan\HotoilBundle\Hydratation\Hydrator;
 
-use Potogan\Populator\Configuration;
-use Potogan\Populator\HydratorInterface;
+use Potogan\HotoilBundle\Hydratation\Configuration;
+use Potogan\HotoilBundle\Hydratation\HydratorInterface;
 
 /**
  * @Annotation
@@ -16,7 +16,7 @@ class Struct implements HydratorInterface
      *
      * @Required
      *
-     * @var array<Potogan\Populator\HydratorInterface>
+     * @var array<Potogan\HotoilBundle\Hydratation\HydratorInterface>
      */
     public $properties;
 
@@ -60,10 +60,7 @@ class Struct implements HydratorInterface
             ;
             $res[$hydratedName] = null;
 
-            if (
-                !$hydrator instanceof InheritData
-                && !array_key_exists($normalizedName, $data)
-            ) {
+            if (!array_key_exists($normalizedName, $data)) {
                 continue;
             }
 
@@ -74,5 +71,42 @@ class Struct implements HydratorInterface
         }
 
         return $this->asObject ? (object)$res : $res;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function normalize($data, Configuration $configuration)
+    {
+        if (is_object($data) && $this->asObject) {
+            $data = get_object_vars($data);
+        }
+
+        if (!is_array($data)) {
+            return [];
+        }
+
+        $res = $this->keepNonMapped ? $data : [];
+
+        foreach ($this->properties as $normalizedName => $hydrator) {
+            $hydratedName = isset($this->aliases[$normalizedName]) 
+                ? $this->aliases[$normalizedName]
+                : $normalizedName
+            ;
+
+            $normalized = null;
+            if (array_key_exists($hydratedName, $data)) {
+                $normalized = $hydrator->normalize(
+                    $data[$hydratedName],
+                    $configuration
+                );
+            }
+
+            if ($hydrator instanceof InheritData) {
+                $res = array_merge($res, $normalized);
+            } else {
+                $res[$normalizedName] = $normalized;
+            }
+        }
     }
 }

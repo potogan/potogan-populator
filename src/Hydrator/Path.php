@@ -1,9 +1,9 @@
 <?php
 
-namespace Potogan\Populator\Hydrator;
+namespace Potogan\HotoilBundle\Hydratation\Hydrator;
 
-use Potogan\Populator\Configuration;
-use Potogan\Populator\HydratorInterface;
+use Potogan\HotoilBundle\Hydratation\Configuration;
+use Potogan\HotoilBundle\Hydratation\HydratorInterface;
 
 /**
  * Used to reach a value deeper into the normalized data.
@@ -27,7 +27,7 @@ class Path implements HydratorInterface
      *
      * @Required
      *
-     * @var Potogan\Populator\HydratorInterface
+     * @var Potogan\HotoilBundle\Hydratation\HydratorInterface
      */
     public $hydrator;
 
@@ -48,5 +48,19 @@ class Path implements HydratorInterface
         }
 
         return $this->hydrator->hydrate($data, $configuration);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function normalize($data, Configuration $configuration)
+    {
+        $res = $this->hydrator->normalize($data, $configuration);
+
+        foreach ($this->parts as $key) {
+            $res = [$key => $res];
+        }
+
+        return $res;
     }
 }

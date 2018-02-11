@@ -4,8 +4,7 @@ namespace Potogan\Populator;
 
 use ReflectionClass;
 use Doctrine\Common\Annotations\Reader;
-use 
-Potogan\Populator\Hydrator\Named;
+use Potogan\Populator\Hydrator\Named;
 
 class Manager
 {

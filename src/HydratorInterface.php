@@ -1,6 +1,6 @@
 <?php
 
-namespace Potogan\Populator;
+namespace Potogan\HotoilBundle\Hydratation;
 
 interface HydratorInterface
 {
