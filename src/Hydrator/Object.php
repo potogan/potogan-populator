@@ -2,6 +2,7 @@
 
 namespace Potogan\Populator\Hydrator;
 
+use ReflectionClass;
 use Potogan\Populator\Configuration;
 use Potogan\Populator\HydratorInterface;
 
@@ -16,7 +17,7 @@ class Object implements HydratorInterface
      *
      * @Required
      * 
-     * @var string
+     * @var Potogan\Populator\HydratorInterface
      */
     public $class;
 
@@ -25,7 +26,7 @@ class Object implements HydratorInterface
      *
      * @Required
      *
-     * @var Potogan\Populator\Hydrator\Struct
+     * @var Potogan\Populator\HydratorInterface
      */
     public $properties;
 
@@ -36,7 +37,9 @@ class Object implements HydratorInterface
     {
         $this->properties->asObject = false;
 
-        $class = new ReflectionClass($this->class);
+        $class = new ReflectionClass(
+            $this->class->hydrate($data, $configuration)
+        );
 
         $res = $class->newInstanceWithoutConstructor();
 
@@ -60,6 +63,18 @@ class Object implements HydratorInterface
      */
     public function normalize($data, Configuration $configuration)
     {
-        throw new \RuntimeException('NIY');
+        $class = new ReflectionClass($data);
+
+        foreach ($class->getProperties() as $property) {
+            $property->setAccessible(true);
+
+            $res[$property->getName()] = $property->getValue($data);
+        }
+
+        $res = $this->properties->normalize($res, $configuration)
+            + $this->class->normalize(get_class($data), $configuration)
+        ;
+
+        return $res;
     }
 }
