@@ -1,9 +1,9 @@
 <?php
 
-namespace Potogan\HotoilBundle\Hydratation\Hydrator;
+namespace Potogan\Populator\Hydrator;
 
-use Potogan\HotoilBundle\Hydratation\Configuration;
-use Potogan\HotoilBundle\Hydratation\HydratorInterface;
+use Potogan\Populator\Configuration;
+use Potogan\Populator\HydratorInterface;
 
 /**
  * @Annotation
@@ -16,7 +16,7 @@ class Struct implements HydratorInterface
      *
      * @Required
      *
-     * @var array<Potogan\HotoilBundle\Hydratation\HydratorInterface>
+     * @var array<Potogan\Populator\HydratorInterface>
      */
     public $properties;
 
@@ -25,7 +25,7 @@ class Struct implements HydratorInterface
      *
      * @var boolean
      */
-    public $keepNonMapped = true;
+    public $keepNonMapped = false;
 
     /**
      * If true, hydrated value will be a stdclass object instead of an array
@@ -108,5 +108,7 @@ class Struct implements HydratorInterface
                 $res[$normalizedName] = $normalized;
             }
         }
+
+        return $res;
     }
 }
