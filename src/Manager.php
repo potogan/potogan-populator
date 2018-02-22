@@ -40,6 +40,7 @@ class Manager
         $configuration = $configuration ?: new Configuration();
         $annotations = $this->reader->getClassAnnotations(new ReflectionClass($class));
 
+        $configuration->set('manager', $this);
 
         foreach ($annotations as $annotation) {
             if (
@@ -56,6 +57,33 @@ class Manager
             }
 
             return $annotation->hydrate($data, $configuration);
+        }
+
+        return $data;
+    }
+
+    public function normalize($class, $data, Configuration $configuration = null, $name = null)
+    {
+        $configuration = $configuration ?: new Configuration();
+        $annotations = $this->reader->getClassAnnotations(new ReflectionClass($class));
+
+        $configuration->set('manager', $this);
+
+        foreach ($annotations as $annotation) {
+            if (
+                !$annotation instanceof HydratorInterface
+            ) {
+                continue;
+            }
+
+            if (
+                $name !== null
+                && (!$annotation instanceof Named || $annotation->name !== $name)
+            ) {
+                continue;
+            }
+
+            return $annotation->normalize($data, $configuration);
         }
 
         return $data;

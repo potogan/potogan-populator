@@ -2,6 +2,7 @@
 
 namespace Potogan\Populator\Hydrator;
 
+use ReflectionClass;
 use Potogan\Populator\Configuration;
 use Potogan\Populator\HydratorInterface;
 
@@ -60,6 +61,14 @@ class Object implements HydratorInterface
      */
     public function normalize($data, Configuration $configuration)
     {
-        throw new \RuntimeException('NIY');
+        $class = new ReflectionClass($this->class);
+
+        foreach ($class->getProperties() as $property) {
+            $property->setAccessible(true);
+
+            $res[$property->getName()] = $property->getValue($data);
+        }
+
+        return $this->properties->normalize($res, $configuration);
     }
 }
