@@ -1,12 +1,12 @@
 <?php
 
-namespace Potogan\HotoilBundle\Hydratation\Hydrator;
+namespace Potogan\Populator\Hydrator;
 
 use DateTimeZone;
 use DateTimeInterface;
 use DateTimeImmutable;
-use Potogan\HotoilBundle\Hydratation\Configuration;
-use Potogan\HotoilBundle\Hydratation\HydratorInterface;
+use Potogan\Populator\Configuration;
+use Potogan\Populator\HydratorInterface;
 
 /**
  * @Annotation

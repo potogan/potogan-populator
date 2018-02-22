@@ -1,9 +1,9 @@
 <?php
 
-namespace Potogan\HotoilBundle\Hydratation\Hydrator;
+namespace Potogan\Populator\Hydrator;
 
-use Potogan\HotoilBundle\Hydratation\Configuration;
-use Potogan\HotoilBundle\Hydratation\HydratorInterface;
+use Potogan\Populator\Configuration;
+use Potogan\Populator\HydratorInterface;
 
 /**
  * Transparent Hydrator wrapper. It's purpose is to tell the Struct Hydrator to give the data it
@@ -20,7 +20,7 @@ class InheritData implements HydratorInterface
      *
      * @Required
      *
-     * @var Potogan\HotoilBundle\Hydratation\HydratorInterface
+     * @var Potogan\Populator\HydratorInterface
      */
     public $hydrator;
 

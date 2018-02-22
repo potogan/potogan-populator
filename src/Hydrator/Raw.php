@@ -1,9 +1,9 @@
 <?php
 
-namespace Potogan\HotoilBundle\Hydratation\Hydrator;
+namespace Potogan\Populator\Hydrator;
 
-use Potogan\HotoilBundle\Hydratation\Configuration;
-use Potogan\HotoilBundle\Hydratation\HydratorInterface;
+use Potogan\Populator\Configuration;
+use Potogan\Populator\HydratorInterface;
 
 /**
  * Transparent Hydrator, used to transmit a value without any modification.

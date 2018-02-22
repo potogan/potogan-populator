@@ -1,9 +1,9 @@
 <?php
 
-namespace Potogan\HotoilBundle\Hydratation\Hydrator;
+namespace Potogan\Populator\Hydrator;
 
-use Potogan\HotoilBundle\Hydratation\Configuration;
-use Potogan\HotoilBundle\Hydratation\HydratorInterface;
+use Potogan\Populator\Configuration;
+use Potogan\Populator\HydratorInterface;
 
 /**
  * Transparent Hydrator wrapper holding a name.
@@ -27,7 +27,7 @@ class Named implements HydratorInterface
      *
      * @Required
      *
-     * @var Potogan\HotoilBundle\Hydratation\HydratorInterface
+     * @var Potogan\Populator\HydratorInterface
      */
     public $wrapped;
 
